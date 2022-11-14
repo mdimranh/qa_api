@@ -1,10 +1,10 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
 
 
 class Question(models.Model):
     question = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     category = models.CharField(max_length=100)
     views = models.IntegerField(default=0)
     share = models.IntegerField(default=0)
@@ -18,5 +18,5 @@ class Question(models.Model):
 
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete = models.CASCADE)
-    author = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     answers = models.TextField()
