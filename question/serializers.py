@@ -18,4 +18,9 @@ class QuestionSerializer(serializers.ModelSerializer):
             return  UserSerializer(user_data).data
         except:
             return {}
+
+class QuestionAddSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = "__all__"
         

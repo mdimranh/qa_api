@@ -1,18 +1,25 @@
-from rest_framework.generics import ListCreateAPIView
+from django.http import JsonResponse
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
+from rest_framework.views import APIView
 
 from .models import Question
-from .serializers import QuestionSerializer
+from .serializers import QuestionAddSerializer, QuestionSerializer
 
-# class Registration(APIView):
-#     def post(self, request):
-#         data = JSONParser().parse(request)
-#         serializer = UserSerializer(data = data)
-#         if serializer.is_valid():
-#             user = serializer.save()
-#             return JsonResponse(serializer.data, status=201)
-#         return JsonResponse(serializer.errors, status=400)
 
-class Questions(ListCreateAPIView):
+class QuestionCreate(CreateAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionAddSerializer
+
+class Questions(ListAPIView):
     serializer_class = QuestionSerializer
     model = serializer_class.Meta.model
     queryset = Question.objects.all()
+
+class QuestionDetails(APIView):
+    def get(self, reequest, id):
+        question = Question.objects.get(id=id)
+        question.views+=1
+        question.save()
+        serializer = QuestionSerializer(question)
+        return JsonResponse(serializer.data)
+    
